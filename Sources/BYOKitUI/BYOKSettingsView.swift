@@ -63,6 +63,17 @@ public struct BYOKSettingsView: View {
     private var configurationList: some View {
         List {
             Section {
+                ProviderOverviewCard(
+                    configuredCount: store.configurations.count,
+                    active: store.activeConfiguration,
+                    provider: store.activeConfiguration.flatMap { provider(for: $0.providerID) },
+                    addAction: { addFlowPresented = true }
+                )
+                .listRowInsets(EdgeInsets())
+                .listRowBackground(Color.clear)
+            }
+
+            Section {
                 ForEach(store.configurations) { config in
                     NavigationLink(value: config.id) {
                         ConfigurationRow(
@@ -146,6 +157,62 @@ public struct BYOKSettingsView: View {
         } else {
             providers = await registry.providers(providerFilter)
         }
+    }
+}
+
+private struct ProviderOverviewCard: View {
+    let configuredCount: Int
+    let active: LLMConfiguration?
+    let provider: Provider?
+    let addAction: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(L("Your AI, your choice"))
+                        .font(.title2.bold())
+                    Text(L("Keys stay in Keychain. Switch providers whenever you need."))
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Image(systemName: "key.horizontal.fill")
+                    .font(.title2)
+                    .foregroundStyle(.tint)
+                    .accessibilityHidden(true)
+            }
+
+            HStack(spacing: 12) {
+                if let active {
+                    if let provider { ProviderBadge(provider: provider, size: 40) }
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(L("Active provider")).font(.caption).foregroundStyle(.secondary)
+                        Text(active.displayName).font(.headline)
+                    }
+                } else {
+                    Text(L("Choose an active provider to start making requests."))
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+                Button(action: addAction) {
+                    Label(L("Add"), systemImage: "plus")
+                }
+                .buttonStyle(.borderedProminent)
+            }
+
+            Text("\(configuredCount) \(L("configured"))")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .padding(20)
+        .background(.background.secondary, in: .rect(cornerRadius: 18))
+        .overlay {
+            RoundedRectangle(cornerRadius: 18)
+                .stroke(.separator.opacity(0.35), lineWidth: 0.5)
+        }
+        .accessibilityElement(children: .contain)
     }
 }
 

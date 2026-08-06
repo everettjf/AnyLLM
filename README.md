@@ -4,6 +4,10 @@
 
 ### Bring Your Own Key, beautifully.
 
+## 2.0 — Provider Command Center
+
+BYOKit 2.0 turns the provider list into a compact command center: the active route, secure-key posture, and add-provider action are visible before the first row. The underlying components remain independently reusable and the base package remains dependency-free.
+
 A Swift Package that gives any **iOS / iPadOS / macOS** app a production-grade
 **BYOK (Bring Your Own Key)** LLM configuration experience — in one line.
 
@@ -67,10 +71,10 @@ onboarding guide.
 **Package.swift**
 
 ```swift
-.package(url: "https://github.com/everettjf/BYOKit", from: "1.0.0")
+.package(url: "https://github.com/everettjf/BYOKit", from: "2.0.0")
 ```
 
-> `from: "1.0.0"` is a *floor*, not a pin — SwiftPM always resolves the newest
+> `from: "2.0.0"` is a *floor*, not a pin — SwiftPM always resolves the newest
 > compatible release, so this line never needs editing when a new version ships.
 
 Add the `BYOKit` product (umbrella). For just the data layer, depend on
