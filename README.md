@@ -2,6 +2,8 @@
 
 # BYOKit
 
+Repository: <https://github.com/everettjf/byokit>
+
 ### Bring Your Own Key, beautifully.
 
 ## 2.0 — Provider Command Center
